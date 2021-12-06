@@ -6,24 +6,24 @@ import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-@Setter
-@Getter
-@NoArgsConstructor
 public class SymmetricAlgorithm {
 	private final String CHARSET = "UTF-8";
-	
+
 	private SecretKey key;
-	
+
 	private String algorithm;
 	private int keySize;
 	private String mode;
 	private String padding;
+
+	byte[] iv = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	IvParameterSpec ivspec = new IvParameterSpec(iv);
+
+	byte[] iv2 = { 0, 0, 0, 0, 0, 0, 0, 0 };
+	IvParameterSpec ivspec2 = new IvParameterSpec(iv2);
 
 	public SymmetricAlgorithm(String cryptoType, int keySize) {
 		super();
@@ -34,9 +34,8 @@ public class SymmetricAlgorithm {
 	private String getInstanceKeyGenerator() {
 		String result = "";
 		result += algorithm;
-		if(!mode.equalsIgnoreCase("None")) {
-			if (mode != null)
-				result += "/" + mode;
+		if (mode != null && !mode.equalsIgnoreCase("None")) {
+			result += "/" + mode;
 			if (padding != null)
 				result += "/" + padding;
 		}
@@ -51,12 +50,15 @@ public class SymmetricAlgorithm {
 		return Base64.getEncoder().encodeToString(key.getEncoded());
 	}
 
-	public String encrypt(String text) throws Exception {
+	public String encrypt(String text, String key) throws Exception {
 		if (this.key == null)
 			return null;
 
+		byte[] decodedKey = Base64.getDecoder().decode(key);
+		SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, algorithm);
+
 		Cipher cipher = Cipher.getInstance(getInstanceKeyGenerator());
-		cipher.init(Cipher.ENCRYPT_MODE, this.key);
+		cipher.init(Cipher.ENCRYPT_MODE, originalKey);
 
 		byte[] plaintext = text.getBytes(CHARSET);
 		byte[] cipherText = cipher.doFinal(plaintext);
@@ -67,34 +69,81 @@ public class SymmetricAlgorithm {
 	public String decrypt(String text, String key) throws Exception {
 		if (key == null || text.trim().isEmpty())
 			return null;
-		
-		Cipher cipher = Cipher.getInstance(getInstanceKeyGenerator());
 
 		byte[] decodedKey = Base64.getDecoder().decode(key);
 		SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, algorithm);
 
+		Cipher cipher = Cipher.getInstance(getInstanceKeyGenerator());
 		cipher.init(Cipher.DECRYPT_MODE, originalKey);
 
 		byte[] cipherText = Base64.getDecoder().decode(text); // base64 decoding
 		byte[] plaintext = cipher.doFinal(cipherText);
-		
+
 		return new String(plaintext, CHARSET);
+	}
+	
+	
+
+	public SymmetricAlgorithm() {
+		super();
+	}
+
+	public SecretKey getKey() {
+		return key;
+	}
+
+	public void setKey(SecretKey key) {
+		this.key = key;
+	}
+
+	public String getAlgorithm() {
+		return algorithm;
+	}
+
+	public void setAlgorithm(String algorithm) {
+		this.algorithm = algorithm;
+	}
+
+	public int getKeySize() {
+		return keySize;
+	}
+
+	public void setKeySize(int keySize) {
+		this.keySize = keySize;
+	}
+
+	public String getMode() {
+		return mode;
+	}
+
+	public void setMode(String mode) {
+		this.mode = mode;
+	}
+
+	public String getPadding() {
+		return padding;
+	}
+
+	public void setPadding(String padding) {
+		this.padding = padding;
 	}
 
 	public static void main(String[] args) throws Exception {
 		SymmetricAlgorithm crypto = new SymmetricAlgorithm();
-		
-		crypto.setAlgorithm("AES");
-		crypto.setKeySize(192);
-		crypto.setMode("ECB");
-		crypto.setPadding("PKCS5Padding");
-		System.out.println(crypto.getInstanceKeyGenerator());
-		
-		String input = "Phung Minh Dat";
+
+		crypto.setAlgorithm("DES");
+		crypto.setKeySize(56);
+//		crypto.setMode("GCM");
+//		crypto.setPadding("NoPadding");
+//		crypto.setPadding("PKCS5Padding");
+//		crypto.setPadding("ISO10126Padding");
+//		crypto.setPadding("BitPadding");
+
+		String input = "Phùng Minh Đạt";
 		String key = crypto.generateKey();
 		System.out.println("Key: " + key);
-		
-		String encrypt = crypto.encrypt(input);
+
+		String encrypt = crypto.encrypt(input, key);
 		System.out.println("encrypt: " + encrypt);
 		String decrypt = crypto.decrypt(encrypt, key);
 		System.out.println("decrypt: " + decrypt);

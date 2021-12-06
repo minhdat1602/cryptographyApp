@@ -1,6 +1,6 @@
 package commons;
 
-public enum Algorithms {
+public enum SymmetricAlgorithmEnum {
 	DES,
 	AES,
 	DESede,

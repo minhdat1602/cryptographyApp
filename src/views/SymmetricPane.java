@@ -32,7 +32,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import algorithms.SymmetricAlgorithm;
-import commons.Algorithms;
+import commons.SymmetricAlgorithmEnum;
 import utils.FIleUtils;
 
 public class SymmetricPane extends JPanel {
@@ -57,15 +57,19 @@ public class SymmetricPane extends JPanel {
 
 	private File inputFile, outputFile, keyFile;
 	private String inputTxt, outputTxt, keyTxt;
-	
+
 	// RIGHT
 	List<Integer> listKeySize;
 	List<String> listMode, listPadding;
 	private String algorithmSelected, modeSelected, paddingSelected;
 	private int keySizeSelected;
 
-	private JComboBox algorithmCbx, keySizeCbx, modeCbx, paddingCbx;
+	private JComboBox<SymmetricAlgorithmEnum> algorithmCbx;
+	private JComboBox<Object> keySizeCbx, paddingCbx;
+	JComboBox<Object> modeCbx;
+
 	private JRadioButton encryptBtn, decryptBtn;
+	private JCheckBox autoGenerationCb;
 
 	// GLOBAL
 	private SymmetricAlgorithm cryptography;
@@ -79,16 +83,18 @@ public class SymmetricPane extends JPanel {
 		keySizeSelected = 56;
 		modeSelected = "None";
 		paddingSelected = "noPadding";
-		
+
 		listMode = new ArrayList<String>();
 		listMode.add("None");
-		listMode.add("CBC");
-		listMode.add("ECB");
-		
+//		listMode.add("CBC");
+		listMode.add("CTR");
+		listMode.add("CFB");
+		listMode.add("OFB");
+
 		listPadding = new ArrayList<String>();
 		listPadding.add("NoPadding");
 		listPadding.add("PKCS5Padding");
-		
+
 		cryptography = new SymmetricAlgorithm(algorithmSelected, keySizeSelected);
 
 		GUI();
@@ -99,7 +105,7 @@ public class SymmetricPane extends JPanel {
 
 		JPanel contentSection = new JPanel();
 		contentSection.setPreferredSize(new Dimension(LEFT_WIDTH, HEIGHT));
-		contentSection.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+//		contentSection.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		add(contentSection, BorderLayout.CENTER);
 		contentSection.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
@@ -197,24 +203,39 @@ public class SymmetricPane extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser chooser = new JFileChooser();
-				if(decryptBtn.isSelected()) {
+				if (decryptBtn.isSelected()) {
 					int returnVal = chooser.showOpenDialog(keyFileComponent);
 					if (returnVal == JFileChooser.APPROVE_OPTION) {
 						keyFile = chooser.getSelectedFile();
 						keyFileTf.setText(keyFile.getPath());
-						
+
 						keyTxt = FIleUtils.readFile(keyFile);
 						keyTf.setText(keyTxt);
 					}
-				}else if(encryptBtn.isSelected()) {
-					int returnVal = chooser.showSaveDialog(keyFileComponent);
-					if (returnVal == JFileChooser.APPROVE_OPTION) {
-						keyFile = chooser.getSelectedFile();
+				} else if (encryptBtn.isSelected()) {
+					if (!autoGenerationCb.isSelected()) {
+						int returnVal = chooser.showOpenDialog(keyFileComponent);
+						if (returnVal == JFileChooser.APPROVE_OPTION) {
+							File file = chooser.getSelectedFile();
+							keyFileTf.setText(file.getPath());
 
-						keyTxt = keyTf.getText();
-						FIleUtils.writeFile(keyTxt, keyFile);
+							keyTxt = FIleUtils.readFile(file);
+							keyTf.setText(keyTxt);
+						}
+					} else {
+						int returnVal = chooser.showSaveDialog(keyFileComponent);
+						if (returnVal == JFileChooser.APPROVE_OPTION) {
+							keyFile = chooser.getSelectedFile();
+
+							keyTxt = keyTf.getText();
+							FIleUtils.writeFile(keyTxt, keyFile);
+							
+							JOptionPane.showMessageDialog(contentSection, "Saved");
+						}
 					}
+
 				}
+
 			}
 		});
 		keyFileComponent.add(keyFileBtn);
@@ -274,9 +295,7 @@ public class SymmetricPane extends JPanel {
 		JPanel propertySection = new JPanel();
 		propertySection.setLayout(null);
 		propertySection.setPreferredSize(new Dimension(RIGHT_WIDTH, HEIGHT));
-		propertySection.setBorder(new TitledBorder(
-				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "select",
-				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		propertySection.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Select", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		propertySection.setBounds(LEFT_WIDTH, 0, RIGHT_WIDTH, HEIGHT);
 		add(propertySection, BorderLayout.EAST);
 
@@ -293,8 +312,8 @@ public class SymmetricPane extends JPanel {
 		algorithmLbl.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		panel.add(algorithmLbl);
 
-		algorithmCbx = new JComboBox<Algorithms>();
-		algorithmCbx.setModel(new DefaultComboBoxModel<Algorithms>(Algorithms.values()));
+		algorithmCbx = new JComboBox<SymmetricAlgorithmEnum>();
+		algorithmCbx.setModel(new DefaultComboBoxModel<SymmetricAlgorithmEnum>(SymmetricAlgorithmEnum.values()));
 //		algorithmCbx.setSelectedIndex(0);
 		algorithmCbx.setSelectedItem(algorithmSelected);
 		algorithmCbx.addActionListener(new ActionListener() {
@@ -308,7 +327,7 @@ public class SymmetricPane extends JPanel {
 				case "DES":
 					listKeySize = new ArrayList<Integer>();
 					listKeySize.add(56);
-					
+
 //					listMode = new ArrayList<String>();
 //					listMode.add("CBC");
 //					listMOde.add("ECB");
@@ -343,7 +362,7 @@ public class SymmetricPane extends JPanel {
 				List<String> listKeySizeStr = listKeySize.stream().map(item -> item.toString())
 						.collect(Collectors.toList());
 
-				keySizeCbx.setModel(new DefaultComboBoxModel(listKeySizeStr.toArray()));
+				keySizeCbx.setModel(new DefaultComboBoxModel<Object>(listKeySizeStr.toArray()));
 			}
 		});
 		algorithmCbx.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -354,8 +373,8 @@ public class SymmetricPane extends JPanel {
 		keySizeLbl.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		panel.add(keySizeLbl);
 
-		keySizeCbx = new JComboBox<String>();
-		keySizeCbx.setModel(new DefaultComboBoxModel(new String[] { ("" + keySizeSelected) }));
+		keySizeCbx = new JComboBox<Object>(new String[] { ("" + keySizeSelected) });
+//		keySizeCbx.setModel(new DefaultComboBoxModel());
 		keySizeCbx.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		keySizeCbx.addActionListener(new ActionListener() {
 
@@ -380,22 +399,22 @@ public class SymmetricPane extends JPanel {
 		modeLbl.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		panel_1.add(modeLbl);
 
-		modeCbx = new JComboBox();
+		modeCbx = new JComboBox<Object>(listMode.toArray());
 		modeCbx.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		modeCbx.setModel(new DefaultComboBoxModel<>(listMode.toArray()));
+//		modeCbx.setModel(new DefaultComboBoxModel());
 		modeCbx.setSelectedIndex(0);
 		modeCbx.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				modeSelected = modeCbx.getSelectedItem().toString();
-				if(modeSelected.equalsIgnoreCase("None")) {
+				if (modeSelected.equalsIgnoreCase("None")) {
 					paddingCbx.setEnabled(false);
-				}else {
+				} else {
 					paddingCbx.setEnabled(true);
 				}
 			}
-			
+
 		});
 		panel_1.add(modeCbx);
 
@@ -404,17 +423,17 @@ public class SymmetricPane extends JPanel {
 		paddingLbl.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		panel_1.add(paddingLbl);
 
-		paddingCbx = new JComboBox();
+		paddingCbx = new JComboBox<Object>(listPadding.toArray());
 		paddingCbx.setEnabled(false);
 		paddingCbx.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		paddingCbx.setModel(new DefaultComboBoxModel<>(listPadding.toArray()));
+//		paddingCbx.setModel(new DefaultComboBoxModel());
 		paddingCbx.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				paddingSelected = paddingCbx.getSelectedItem().toString();
-			}	
-			
+			}
+
 		});
 		panel_1.add(paddingCbx);
 
@@ -426,8 +445,16 @@ public class SymmetricPane extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				keyFileBtn.setText("Save file");
-				keyTf.setEditable(false);
+				autoGenerationCb.setEnabled(true);
+				if(autoGenerationCb.isSelected()) {
+					keyFileBtn.setText("Save file");
+					keyFileBtn.setEnabled(false);
+					keyTf.setEditable(false);
+				}else {
+					keyFileBtn.setText("Open file");
+					keyFileBtn.setEnabled(true);
+					keyTf.setEditable(true);
+				}
 			}
 
 		});
@@ -444,19 +471,38 @@ public class SymmetricPane extends JPanel {
 				keyFileBtn.setText("Open file");
 				keyFileBtn.setEnabled(true);
 				keyTf.setEditable(true);
+				
+				autoGenerationCb.setEnabled(false);
 			}
 		});
 		propertySection.add(decryptBtn);
 
-		JCheckBox autoGenerationCb = new JCheckBox("Auto generate key");
-		autoGenerationCb.setEnabled(false);
+		autoGenerationCb = new JCheckBox("Auto generate key");
 		autoGenerationCb.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		autoGenerationCb.setBounds(10, 249, 220, 21);
 		autoGenerationCb.setSelected(true);
+		autoGenerationCb.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (autoGenerationCb.isSelected()) {
+					keyTf.setEditable(false);
+					keyFileBtn.setText("Save file");
+					keyFileBtn.setEnabled(false);
+				} else {
+					keyTf.setEditable(true);
+					keyFileBtn.setText("Open file");
+					keyFileBtn.setEnabled(true);
+				}
+			}
+
+		});
 		propertySection.add(autoGenerationCb);
 
 		JButton runBtn = new JButton("Start");
-		runBtn.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		runBtn.setBackground(Color.DARK_GRAY);
+		runBtn.setForeground(Color.WHITE);
+		runBtn.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		runBtn.setBounds(10, 309, 220, 50);
 		runBtn.addActionListener(new ActionListener() {
 
@@ -471,15 +517,19 @@ public class SymmetricPane extends JPanel {
 				cryptography.setKeySize(keySizeSelected);
 				cryptography.setMode(modeSelected);
 				cryptography.setPadding(paddingSelected);
-				
+
 				try {
 					inputText = inputArea.getText();
 					if (encryptBtn.isSelected()) {
-						keyText = cryptography.generateKey();
-						keyTf.setText(keyText);
-						outputText = cryptography.encrypt(inputText);
+						if(autoGenerationCb.isSelected()) {
+							keyText = cryptography.generateKey();
+							keyTf.setText(keyText);
+						}else {
+							keyText = keyTf.getText();
+						}
+						outputText = cryptography.encrypt(inputText, keyText);
 						outputArea.setText(outputText);
-						
+
 						keyFileBtn.setEnabled(true);
 						outputFileBtn.setEnabled(true);
 					} else if (decryptBtn.isSelected()) {
@@ -488,9 +538,10 @@ public class SymmetricPane extends JPanel {
 						outputArea.setText(outputText);
 					}
 				} catch (Exception ex) {
-					System.out.println(ex.getMessage());
+					ex.printStackTrace();
+					JOptionPane.showMessageDialog(contentSection, ex.getMessage());
 				}
-				
+
 				System.out.println("-------------START---------------");
 				System.out.println("Algorithm: " + algorithmSelected);
 				System.out.println("Key size: " + keySizeSelected);

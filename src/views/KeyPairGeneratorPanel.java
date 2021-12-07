@@ -176,6 +176,8 @@ public class KeyPairGeneratorPanel extends JPanel {
 		panel_2.setLayout(new GridLayout(1, 0, 0, 0));
 
 		JLabel lblNewLabel_1 = new JLabel("");
+		ImageIcon icon1 = new ImageIcon(new ImageIcon(KeyPairGeneratorPanel.class.getResource("/images/day.jpg")).getImage().getScaledInstance(580, 250, 1));
+		lblNewLabel_1.setIcon(icon1);
 		lblNewLabel_1.setBackground(Color.WHITE);
 //		ImageIcon imageIcon1 = new ImageIcon(new ImageIcon(HashPanel.class.getResource("/images/6.jpg")).getImage().getScaledInstance(580, 250, 1));
 //		lblNewLabel_1.setIcon(imageIcon1);
@@ -206,7 +208,7 @@ public class KeyPairGeneratorPanel extends JPanel {
 		panel.setBorder(new TitledBorder(
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
 				"properties", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel.setBounds(10, 60, 220, 83);
+		panel.setBounds(10, 25, 220, 83);
 		propertySection.add(panel);
 		panel.setLayout(new GridLayout(2, 2, 0, 5));
 
@@ -299,11 +301,11 @@ public class KeyPairGeneratorPanel extends JPanel {
 		propertySection.add(runBtn);
 
 		JCheckBox generatePairCb = new JCheckBox("Generate key pair");
-		generatePairCb.setBackground(Color.WHITE);
+		generatePairCb.setBackground(new Color(240, 240, 240));
 		generatePairCb.setSelected(true);
 		generatePairCb.setEnabled(false);
 		generatePairCb.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		generatePairCb.setBounds(10, 24, 220, 30);
+		generatePairCb.setBounds(10, 114, 220, 30);
 		propertySection.add(generatePairCb);
 
 	}

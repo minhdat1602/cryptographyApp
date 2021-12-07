@@ -119,7 +119,7 @@ public class MainView extends JFrame {
 		});
 		toolBar.add(asymmetricNavBtn);
 		
-		generatePairNavBtn = new JButton("Generate Pair");
+		generatePairNavBtn = new JButton("Genkey pair");
 		ImageIcon pairIcon = new ImageIcon(new ImageIcon(MainView.class.getResource("/images/pair.png")).getImage().getScaledInstance(25, 25, 1));
 		generatePairNavBtn.setIcon(pairIcon);
 		generatePairNavBtn.setBackground(Color.WHITE);

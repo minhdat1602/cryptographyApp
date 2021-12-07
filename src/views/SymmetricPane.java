@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,6 +36,7 @@ import javax.swing.border.TitledBorder;
 import algorithms.SymmetricAlgorithm;
 import commons.SymmetricConstants;
 import utils.FIleUtils;
+import javax.swing.UIManager;
 
 public class SymmetricPane extends JPanel {
 
@@ -68,6 +70,7 @@ public class SymmetricPane extends JPanel {
 	private JComboBox<SymmetricConstants> algorithmCbx;
 	private JComboBox<Object> keySizeCbx, paddingCbx;
 	JComboBox<Object> modeCbx;
+	private JButton genkeyBtn;
 
 	private JRadioButton encryptBtn, decryptBtn;
 	private JCheckBox autoGenerationCb;
@@ -492,10 +495,12 @@ public class SymmetricPane extends JPanel {
 					keyTf.setEditable(false);
 					keyFileBtn.setText("Save file");
 					keyFileBtn.setEnabled(false);
+					genkeyBtn.setEnabled(false);
 				} else {
 					keyTf.setEditable(true);
 					keyFileBtn.setText("Open file");
 					keyFileBtn.setEnabled(true);
+					genkeyBtn.setEnabled(true);
 				}
 			}
 
@@ -563,6 +568,28 @@ public class SymmetricPane extends JPanel {
 		typeCipher.add(encryptBtn);
 		typeCipher.add(decryptBtn);
 		encryptBtn.setSelected(true);
+		
+		genkeyBtn = new JButton("Generate Key");
+		genkeyBtn.setEnabled(false);
+		genkeyBtn.setForeground(Color.BLACK);
+		genkeyBtn.setBackground(Color.WHITE);
+		genkeyBtn.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		genkeyBtn.setBounds(10, 369, 220, 50);
+		genkeyBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					keyText = cryptography.generateKey();
+					keyTf.setText(keyText);
+				} catch (NoSuchAlgorithmException e1) {
+					e1.printStackTrace();
+					JOptionPane.showMessageDialog(contentSection, e1.getMessage());
+				}
+			}
+			
+		});
+		propertySection.add(genkeyBtn);
 	}
 
 	public static void main(String[] args) {

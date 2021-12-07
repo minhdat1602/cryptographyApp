@@ -18,7 +18,8 @@ public class FIleUtils {
 			while (bytesRead < bytesToRead) {
 				bytesRead += is.read(data, bytesRead, bytesToRead - bytesRead);
 			}
-			return Base64.getEncoder().encodeToString(data);
+
+			return file.getName().endsWith("txt") ? new String(data) : Base64.getEncoder().encodeToString(data);
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 			return null;
@@ -28,14 +29,14 @@ public class FIleUtils {
 	public static void writeFile(String src, File des) {
 		byte[] data = null;
 		try (OutputStream os = new FileOutputStream(des)) {
-			data = Base64.getDecoder().decode(src.getBytes("UTF-8"));
+			data = des.getName().endsWith("txt") ? src.getBytes("UTF-8") : Base64.getDecoder().decode(src.getBytes("UTF-8"));
 			os.write(data);
 			os.flush();
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
 	}
-	
+
 	public static void main(String[] args) throws UnsupportedEncodingException {
 		File file = new File("D:\\MS001.jpg");
 		byte[] data = null;
@@ -50,7 +51,7 @@ public class FIleUtils {
 			System.out.println(e.getMessage());
 		}
 		String a = Base64.getEncoder().encodeToString(data);
-		
+
 		byte[] b = Base64.getDecoder().decode(a.getBytes("UTF-8"));
 		File des = new File("D:\\MS002.jpg");
 		try (OutputStream os = new FileOutputStream(des)) {

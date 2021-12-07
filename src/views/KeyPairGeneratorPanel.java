@@ -269,6 +269,8 @@ public class KeyPairGeneratorPanel extends JPanel {
 		panel.add(keySizeCbx);
 
 		JButton runBtn = new JButton("Start");
+		ImageIcon runIcon = new ImageIcon(new ImageIcon(AsymmetricPane.class.getResource("/images/run.png")).getImage().getScaledInstance(30, 30, 1));
+		runBtn.setIcon(runIcon);
 		runBtn.setForeground(Color.WHITE);
 		runBtn.setBackground(Color.DARK_GRAY);
 		runBtn.setFont(new Font("Tahoma", Font.PLAIN, 16));

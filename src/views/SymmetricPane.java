@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -502,6 +503,8 @@ public class SymmetricPane extends JPanel {
 		propertySection.add(autoGenerationCb);
 
 		JButton runBtn = new JButton("Start");
+		ImageIcon runIcon = new ImageIcon(new ImageIcon(AsymmetricPane.class.getResource("/images/run.png")).getImage().getScaledInstance(30, 30, 1));
+		runBtn.setIcon(runIcon);
 		runBtn.setBackground(Color.DARK_GRAY);
 		runBtn.setForeground(Color.WHITE);
 		runBtn.setFont(new Font("Tahoma", Font.PLAIN, 16));

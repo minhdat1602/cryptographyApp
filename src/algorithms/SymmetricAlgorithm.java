@@ -1,6 +1,8 @@
 package algorithms;
 
+import java.io.File;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Base64;
 
 import javax.crypto.Cipher;
@@ -8,6 +10,8 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+
+import utils.FIleUtils;
 
 public class SymmetricAlgorithm {
 	private final String CHARSET = "UTF-8";
@@ -20,10 +24,10 @@ public class SymmetricAlgorithm {
 	private String padding;
 
 	byte[] iv = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-	IvParameterSpec ivspec = new IvParameterSpec(iv);
+	IvParameterSpec ivspec16 = new IvParameterSpec(iv);
 
 	byte[] iv2 = { 0, 0, 0, 0, 0, 0, 0, 0 };
-	IvParameterSpec ivspec2 = new IvParameterSpec(iv2);
+	IvParameterSpec ivspec8 = new IvParameterSpec(iv2);
 
 	public SymmetricAlgorithm(String cryptoType, int keySize) {
 		super();
@@ -41,6 +45,12 @@ public class SymmetricAlgorithm {
 		}
 		return result;
 	}
+	
+	public IvParameterSpec generateIv() {
+	    byte[] iv = new byte[8];
+	    new SecureRandom().nextBytes(iv);
+	    return new IvParameterSpec(iv);
+	}
 
 	public String generateKey() throws NoSuchAlgorithmException {
 		KeyGenerator keyGenerator = KeyGenerator.getInstance(algorithm);
@@ -55,6 +65,7 @@ public class SymmetricAlgorithm {
 		SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, algorithm);
 
 		Cipher cipher = Cipher.getInstance(getInstanceKeyGenerator());
+//		cipher.init(Cipher.ENCRYPT_MODE, originalKey, ivspec16);
 		cipher.init(Cipher.ENCRYPT_MODE, originalKey);
 
 		byte[] plaintext = text.getBytes(CHARSET);
@@ -68,6 +79,7 @@ public class SymmetricAlgorithm {
 		SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, algorithm);
 
 		Cipher cipher = Cipher.getInstance(getInstanceKeyGenerator());
+//		cipher.init(Cipher.DECRYPT_MODE, originalKey, ivspec16);
 		cipher.init(Cipher.DECRYPT_MODE, originalKey);
 
 		byte[] cipherText = Base64.getDecoder().decode(text); // base64 decoding
@@ -75,8 +87,29 @@ public class SymmetricAlgorithm {
 
 		return new String(plaintext, CHARSET);
 	}
-	
-	
+
+	public static void main(String[] args) throws Exception {
+		SymmetricAlgorithm crypto = new SymmetricAlgorithm();
+
+		crypto.setAlgorithm("AES");
+		crypto.setKeySize(128);
+//		crypto.setMode("ECB");
+//		crypto.setPadding("NoPadding");
+//		crypto.setPadding("PKCS5Padding");
+//		crypto.setPadding("ISO10126Padding");
+//		crypto.setPadding("BitPadding");
+
+//		String input = "Phùng Minh Đạt";
+		String input = FIleUtils.readFile(new File("D:\\MS001.jpg"));
+		String key = crypto.generateKey();
+		System.out.println("Key: " + key);
+
+		String encrypt = crypto.encrypt(input, key);
+		System.out.println("encrypt: " + encrypt);
+		String decrypt = crypto.decrypt(encrypt, key);
+		System.out.println("decrypt: " + decrypt);
+		FIleUtils.writeFile(decrypt,new File("D:\\MS003.jpg"));
+	}
 
 	public SymmetricAlgorithm() {
 		super();
@@ -120,27 +153,6 @@ public class SymmetricAlgorithm {
 
 	public void setPadding(String padding) {
 		this.padding = padding;
-	}
-
-	public static void main(String[] args) throws Exception {
-		SymmetricAlgorithm crypto = new SymmetricAlgorithm();
-
-		crypto.setAlgorithm("DES");
-		crypto.setKeySize(56);
-//		crypto.setMode("GCM");
-//		crypto.setPadding("NoPadding");
-//		crypto.setPadding("PKCS5Padding");
-//		crypto.setPadding("ISO10126Padding");
-//		crypto.setPadding("BitPadding");
-
-		String input = "Phùng Minh Đạt";
-		String key = crypto.generateKey();
-		System.out.println("Key: " + key);
-
-		String encrypt = crypto.encrypt(input, key);
-		System.out.println("encrypt: " + encrypt);
-		String decrypt = crypto.decrypt(encrypt, key);
-		System.out.println("decrypt: " + decrypt);
 	}
 
 }

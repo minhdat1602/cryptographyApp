@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -363,6 +364,8 @@ public class AsymmetricPane extends JPanel {
 		propertySection.add(decryptBtn);
 
 		JButton runBtn = new JButton("Start");
+		ImageIcon runIcon = new ImageIcon(new ImageIcon(AsymmetricPane.class.getResource("/images/run.png")).getImage().getScaledInstance(30, 30, 1));
+		runBtn.setIcon(runIcon);
 		runBtn.setForeground(Color.WHITE);
 		runBtn.setBackground(Color.DARK_GRAY);
 		runBtn.setFont(new Font("Tahoma", Font.PLAIN, 16));

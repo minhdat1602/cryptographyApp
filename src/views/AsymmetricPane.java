@@ -31,7 +31,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import algorithms.AsymmetricAlgorithm;
-import commons.AsymmetricAlgorithmEnum;
+import commons.AsymmetricConstants;
 import utils.FIleUtils;
 
 public class AsymmetricPane extends JPanel {
@@ -280,8 +280,8 @@ public class AsymmetricPane extends JPanel {
 		algorithmLbl.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		panel.add(algorithmLbl);
 
-		algorithmCbx = new JComboBox<AsymmetricAlgorithmEnum>();
-		algorithmCbx.setModel(new DefaultComboBoxModel<AsymmetricAlgorithmEnum>(AsymmetricAlgorithmEnum.values()));
+		algorithmCbx = new JComboBox<AsymmetricConstants>();
+		algorithmCbx.setModel(new DefaultComboBoxModel<AsymmetricConstants>(AsymmetricConstants.values()));
 		algorithmCbx.setSelectedIndex(0);
 		algorithmCbx.setSelectedItem(algorithmSelected);
 		algorithmCbx.addActionListener(new ActionListener() {
@@ -393,7 +393,9 @@ public class AsymmetricPane extends JPanel {
 					
 					keyFileBtn.setEnabled(true);
 					outputFileBtn.setEnabled(true);
+					
 				}catch(Exception ex2) {
+					JOptionPane.showMessageDialog(contentSection, ex2.getMessage());
 					System.out.println(ex2.getMessage());
 				}
 

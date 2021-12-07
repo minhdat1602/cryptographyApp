@@ -30,7 +30,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import algorithms.AsymmetricAlgorithm;
-import commons.AsymmetricAlgorithmEnum;
+import commons.AsymmetricConstants;
 import utils.FIleUtils;
 
 public class KeyPairGeneratorPanel extends JPanel {
@@ -44,7 +44,7 @@ public class KeyPairGeneratorPanel extends JPanel {
 	private static final int RIGHT_WIDTH = 240;
 	private static final int LEFT_WIDTH = WIDTH - 240;
 
-	private JComboBox<AsymmetricAlgorithmEnum> algorithmCbx;
+	private JComboBox<AsymmetricConstants> algorithmCbx;
 	private JComboBox<Object> keySizeCbx;
 	private JTextField privateKeyTf, publicKeyTf;
 	private JButton privateKeyBtn, publicKeyBtn;
@@ -101,7 +101,7 @@ public class KeyPairGeneratorPanel extends JPanel {
 		privateKeyTf.setColumns(33);
 
 		privateKeyBtn = new JButton("   Save   ");
-		privateKeyBtn.setBackground(Color.WHITE);
+		privateKeyBtn.setBackground(new Color(240, 240, 240));
 		privateKeyBtn.setEnabled(false);
 		privateKeyBtn.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		privateKeyBtn.addActionListener(new ActionListener() {
@@ -140,7 +140,7 @@ public class KeyPairGeneratorPanel extends JPanel {
 		publicKeyTf.setColumns(33);
 
 		publicKeyBtn = new JButton("   Save   ");
-		publicKeyBtn.setBackground(Color.WHITE);
+		publicKeyBtn.setBackground(new Color(240, 240, 240));
 		publicKeyBtn.setEnabled(false);
 		publicKeyBtn.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		publicKeyBtn.setHorizontalAlignment(SwingConstants.LEFT);
@@ -202,7 +202,7 @@ public class KeyPairGeneratorPanel extends JPanel {
 		add(propertySection, BorderLayout.EAST);
 
 		JPanel panel = new JPanel();
-		panel.setBackground(Color.WHITE);
+		panel.setBackground(new Color(240, 240, 240));
 		panel.setBorder(new TitledBorder(
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
 				"properties", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -215,9 +215,9 @@ public class KeyPairGeneratorPanel extends JPanel {
 		algorithmLbl.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		panel.add(algorithmLbl);
 
-		algorithmCbx = new JComboBox<AsymmetricAlgorithmEnum>();
+		algorithmCbx = new JComboBox<AsymmetricConstants>();
 		algorithmCbx.setBackground(Color.WHITE);
-		algorithmCbx.setModel(new DefaultComboBoxModel<AsymmetricAlgorithmEnum>(AsymmetricAlgorithmEnum.values()));
+		algorithmCbx.setModel(new DefaultComboBoxModel<AsymmetricConstants>(AsymmetricConstants.values()));
 		algorithmCbx.setSelectedIndex(0);
 		algorithmCbx.setSelectedItem(algorithmSelected);
 		algorithmCbx.addActionListener(new ActionListener() {

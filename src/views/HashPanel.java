@@ -26,7 +26,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import algorithms.HashAlgorithm;
-import commons.HashALgorithmEnum;
+import commons.HashConstants;
 import utils.FIleUtils;
 
 public class HashPanel extends JPanel {
@@ -77,7 +77,7 @@ public class HashPanel extends JPanel {
 		panel_1.add(inputSrp, BorderLayout.CENTER);
 
 		JPanel panel_3 = new JPanel();
-		panel_3.setBackground(Color.WHITE);
+		panel_3.setBackground(new Color(240, 240, 240));
 		panel_3.setPreferredSize(new Dimension(70, 100));
 		panel_1.add(panel_3, BorderLayout.EAST);
 		panel_3.setLayout(new BorderLayout(0, 0));
@@ -118,7 +118,7 @@ public class HashPanel extends JPanel {
 		panel_2.add(hashSrp, BorderLayout.CENTER);
 
 		JPanel panel_4 = new JPanel();
-		panel_4.setBackground(Color.WHITE);
+		panel_4.setBackground(new Color(240, 240, 240));
 		panel_4.setPreferredSize(new Dimension(70, 100));
 		panel_2.add(panel_4, BorderLayout.EAST);
 		panel_4.setLayout(new BorderLayout(0, 0));
@@ -202,7 +202,7 @@ public class HashPanel extends JPanel {
 		hashAlgorithmCbx = new JComboBox<Object>();
 		hashAlgorithmCbx.setBackground(Color.WHITE);
 		hashAlgorithmCbx.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		hashAlgorithmCbx.setModel(new DefaultComboBoxModel<>(HashALgorithmEnum.hashAlgorithm.toArray()));
+		hashAlgorithmCbx.setModel(new DefaultComboBoxModel<>(HashConstants.hashAlgorithm.toArray()));
 		hashAlgorithmCbx.setSelectedIndex(0);
 		hashAlgorithmCbx.setBounds(120, 35, 110, 30);
 		propertySection.add(hashAlgorithmCbx);

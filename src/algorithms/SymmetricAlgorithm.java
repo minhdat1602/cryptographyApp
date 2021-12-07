@@ -51,9 +51,6 @@ public class SymmetricAlgorithm {
 	}
 
 	public String encrypt(String text, String key) throws Exception {
-		if (this.key == null)
-			return null;
-
 		byte[] decodedKey = Base64.getDecoder().decode(key);
 		SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, algorithm);
 
@@ -67,9 +64,6 @@ public class SymmetricAlgorithm {
 	}
 
 	public String decrypt(String text, String key) throws Exception {
-		if (key == null || text.trim().isEmpty())
-			return null;
-
 		byte[] decodedKey = Base64.getDecoder().decode(key);
 		SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, algorithm);
 

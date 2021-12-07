@@ -32,7 +32,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import algorithms.SymmetricAlgorithm;
-import commons.SymmetricAlgorithmEnum;
+import commons.SymmetricConstants;
 import utils.FIleUtils;
 
 public class SymmetricPane extends JPanel {
@@ -64,7 +64,7 @@ public class SymmetricPane extends JPanel {
 	private String algorithmSelected, modeSelected, paddingSelected;
 	private int keySizeSelected;
 
-	private JComboBox<SymmetricAlgorithmEnum> algorithmCbx;
+	private JComboBox<SymmetricConstants> algorithmCbx;
 	private JComboBox<Object> keySizeCbx, paddingCbx;
 	JComboBox<Object> modeCbx;
 
@@ -284,6 +284,8 @@ public class SymmetricPane extends JPanel {
 					outputFile = chooser.getSelectedFile();
 					outputTxt = outputArea.getText();
 					FIleUtils.writeFile(outputTxt, outputFile);
+					
+					JOptionPane.showMessageDialog(contentSection, "Saved");
 				} else {
 					System.out.println("NOOOOOOOOOOOOOOOOO");
 				}
@@ -312,8 +314,8 @@ public class SymmetricPane extends JPanel {
 		algorithmLbl.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		panel.add(algorithmLbl);
 
-		algorithmCbx = new JComboBox<SymmetricAlgorithmEnum>();
-		algorithmCbx.setModel(new DefaultComboBoxModel<SymmetricAlgorithmEnum>(SymmetricAlgorithmEnum.values()));
+		algorithmCbx = new JComboBox<SymmetricConstants>();
+		algorithmCbx.setModel(new DefaultComboBoxModel<SymmetricConstants>(SymmetricConstants.values()));
 //		algorithmCbx.setSelectedIndex(0);
 		algorithmCbx.setSelectedItem(algorithmSelected);
 		algorithmCbx.addActionListener(new ActionListener() {

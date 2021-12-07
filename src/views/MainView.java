@@ -8,6 +8,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -52,7 +53,7 @@ public class MainView extends JFrame {
 		this.setTitle("Cryptography");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
-		setBounds(100, 100, 850, 590);
+		setBounds(100, 100, 850, 620);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -71,13 +72,15 @@ public class MainView extends JFrame {
 
 	void GUI() {
 		JToolBar toolBar = new JToolBar();
-		toolBar.setBackground(Color.WHITE);
-		toolBar.setPreferredSize(new Dimension(WIDTH, 25));
+		toolBar.setBackground(new Color(240, 240, 240));
+		toolBar.setPreferredSize(new Dimension(850, 50));
 		contentPane.add(toolBar, BorderLayout.NORTH);
 
 		symmetricNavBtn = new JButton("Symmetric");
+		ImageIcon symmetricIcon = new ImageIcon(new ImageIcon(MainView.class.getResource("/images/symmetric.png")).getImage().getScaledInstance(25, 25, 1));
+		symmetricNavBtn.setIcon(symmetricIcon);
 		symmetricNavBtn.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		symmetricNavBtn.setBackground(Color.WHITE);
+		symmetricNavBtn.setBackground(Color.LIGHT_GRAY);
 		symmetricNavBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -95,6 +98,8 @@ public class MainView extends JFrame {
 		toolBar.add(symmetricNavBtn);
 
 		asymmetricNavBtn = new JButton("Asymmetric");
+		ImageIcon asymmetricIcon = new ImageIcon(new ImageIcon(MainView.class.getResource("/images/asymmetric.png")).getImage().getScaledInstance(25, 25, 1));
+		asymmetricNavBtn.setIcon(asymmetricIcon);
 		asymmetricNavBtn.setBackground(Color.WHITE);
 		asymmetricNavBtn.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		asymmetricNavBtn.addActionListener(new ActionListener() {
@@ -115,6 +120,8 @@ public class MainView extends JFrame {
 		toolBar.add(asymmetricNavBtn);
 		
 		generatePairNavBtn = new JButton("Generate Pair");
+		ImageIcon pairIcon = new ImageIcon(new ImageIcon(MainView.class.getResource("/images/pair.png")).getImage().getScaledInstance(25, 25, 1));
+		generatePairNavBtn.setIcon(pairIcon);
 		generatePairNavBtn.setBackground(Color.WHITE);
 		generatePairNavBtn.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		generatePairNavBtn.addActionListener(new ActionListener() {
@@ -134,7 +141,9 @@ public class MainView extends JFrame {
 		});
 		toolBar.add(generatePairNavBtn);
 		
-		hashFunctionNavBtn = new JButton("     Hash     ");
+		hashFunctionNavBtn = new JButton("Hash          ");
+		ImageIcon hashIcon = new ImageIcon(new ImageIcon(MainView.class.getResource("/images/hash.png")).getImage().getScaledInstance(25, 25, 1));
+		hashFunctionNavBtn.setIcon(hashIcon);
 		hashFunctionNavBtn.setBackground(Color.WHITE);
 		hashFunctionNavBtn.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		hashFunctionNavBtn.addActionListener(new ActionListener() {

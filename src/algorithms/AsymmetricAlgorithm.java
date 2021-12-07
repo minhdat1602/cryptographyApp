@@ -106,18 +106,18 @@ public class AsymmetricAlgorithm {
 	public static void main(String[] args) throws Exception {
 		AsymmetricAlgorithm asymmetric = new AsymmetricAlgorithm("RSA", 1024);
 		KeyPair keypair = asymmetric.generateKey();
-		String privateKey = Base64.getEncoder().encodeToString(keypair.getPrivate().getEncoded());
-		System.out.println("Private: " + privateKey);
 		String publicKey = Base64.getEncoder().encodeToString(keypair.getPublic().getEncoded());
 		System.out.println("Public: " + publicKey);
+		String privateKey = Base64.getEncoder().encodeToString(keypair.getPrivate().getEncoded());
+		System.out.println("Private: " + privateKey);
 
-		String plaintext = "Phung Minh Dat";
+		String plaintext = "Phùng Minh Đạt";
 		System.out.println("PlainText: " + plaintext);
 
-		String encrypt = asymmetric.doEncryption(plaintext, privateKey);
+		String encrypt = asymmetric.doEncryption(plaintext, publicKey);
 		System.out.println("Encrypt: " + encrypt);
 
-		String decrypt = asymmetric.doDecryption(encrypt, publicKey);
+		String decrypt = asymmetric.doDecryption(encrypt, privateKey);
 		System.out.println("Decrypt: " + decrypt);
 	}
 

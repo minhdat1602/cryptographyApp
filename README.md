@@ -1,3 +1,1 @@
-# securesystem_midexam
-# cryptographyApp
-# cryptographyApp
+# Phần mềm mật mã giữa kỳ môn An toàn bảo mật hệ thống.

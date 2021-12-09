@@ -1,17 +1,16 @@
 package algorithms;
 
-import java.io.File;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
-import utils.FIleUtils;
 
 public class SymmetricAlgorithm {
 	private final String CHARSET = "UTF-8";
@@ -27,6 +26,7 @@ public class SymmetricAlgorithm {
 	IvParameterSpec ivspec16 = new IvParameterSpec(iv);
 
 	byte[] iv2 = { 0, 0, 0, 0, 0, 0, 0, 0 };
+	String iv22 = "0000000000000000";
 	IvParameterSpec ivspec8 = new IvParameterSpec(iv2);
 
 	public SymmetricAlgorithm(String cryptoType, int keySize) {
@@ -45,11 +45,11 @@ public class SymmetricAlgorithm {
 		}
 		return result;
 	}
-	
-	public IvParameterSpec generateIv() {
-	    byte[] iv = new byte[8];
-	    new SecureRandom().nextBytes(iv);
-	    return new IvParameterSpec(iv);
+
+	public IvParameterSpec generateIv(int size) {
+		byte[] iv = new byte[size];
+		new SecureRandom().nextBytes(iv);
+		return new IvParameterSpec(iv);
 	}
 
 	public String generateKey() throws NoSuchAlgorithmException {
@@ -61,11 +61,17 @@ public class SymmetricAlgorithm {
 	}
 
 	public String encrypt(String text, String key) throws Exception {
+		if (mode.equalsIgnoreCase("DES")) {
+			if (padding.equalsIgnoreCase("NoPadding")) {
+				throw new IllegalBlockSizeException("Input length not multiple of 8 bytes");
+			}
+		}
+
 		byte[] decodedKey = Base64.getDecoder().decode(key);
 		SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, algorithm);
 
 		Cipher cipher = Cipher.getInstance(getInstanceKeyGenerator());
-//		cipher.init(Cipher.ENCRYPT_MODE, originalKey, ivspec16);
+
 		cipher.init(Cipher.ENCRYPT_MODE, originalKey);
 
 		byte[] plaintext = text.getBytes(CHARSET);
@@ -79,7 +85,7 @@ public class SymmetricAlgorithm {
 		SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, algorithm);
 
 		Cipher cipher = Cipher.getInstance(getInstanceKeyGenerator());
-//		cipher.init(Cipher.DECRYPT_MODE, originalKey, ivspec16);
+
 		cipher.init(Cipher.DECRYPT_MODE, originalKey);
 
 		byte[] cipherText = Base64.getDecoder().decode(text); // base64 decoding
@@ -91,16 +97,16 @@ public class SymmetricAlgorithm {
 	public static void main(String[] args) throws Exception {
 		SymmetricAlgorithm crypto = new SymmetricAlgorithm();
 
-		crypto.setAlgorithm("AES");
-		crypto.setKeySize(128);
-//		crypto.setMode("ECB");
-//		crypto.setPadding("NoPadding");
+		crypto.setAlgorithm("DES");
+		crypto.setKeySize(56);
+		crypto.setMode("ECB");
+		crypto.setPadding("NoPadding");
 //		crypto.setPadding("PKCS5Padding");
 //		crypto.setPadding("ISO10126Padding");
 //		crypto.setPadding("BitPadding");
 
-//		String input = "Phùng Minh Đạt";
-		String input = FIleUtils.readFile(new File("D:\\MS001.jpg"));
+		String input = "Phùng Minh Đạt";
+//		String input = FIleUtils.readFile(new File("D:\\MS001.jpg"));
 		String key = crypto.generateKey();
 		System.out.println("Key: " + key);
 
@@ -108,7 +114,7 @@ public class SymmetricAlgorithm {
 		System.out.println("encrypt: " + encrypt);
 		String decrypt = crypto.decrypt(encrypt, key);
 		System.out.println("decrypt: " + decrypt);
-		FIleUtils.writeFile(decrypt,new File("D:\\MS003.jpg"));
+//		FIleUtils.writeFile(decrypt,new File("D:\\MS003.jpg"));
 	}
 
 	public SymmetricAlgorithm() {

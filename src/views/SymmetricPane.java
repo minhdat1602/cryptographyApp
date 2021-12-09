@@ -90,7 +90,7 @@ public class SymmetricPane extends JPanel {
 
 		listMode = new ArrayList<String>();
 		listMode.add("None");
-//		listMode.add("CBC");
+		listMode.add("ECB");
 		listMode.add("CTR");
 		listMode.add("CFB");
 		listMode.add("OFB");
@@ -154,7 +154,7 @@ public class SymmetricPane extends JPanel {
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					inputFile = chooseInputFile.getSelectedFile();
 
-					inputFileTf.setText(inputFile.getName());
+					inputFileTf.setText(inputFile.getPath());
 
 					inputTxt = FIleUtils.readFile(inputFile);
 					inputArea.setText(inputTxt);

@@ -76,10 +76,11 @@ public class AsymmetricPane extends JPanel {
 	public AsymmetricPane() {
 		algorithmSelected = "RSA";
 		keySizeSelected = 512;
-//		listKeySize = new ArrayList<Integer>();
-//		listKeySize.add(512);
-//		listKeySize.add(1024);
-//		listKeySize.add(2048);
+		listKeySize = new ArrayList<Integer>();
+		listKeySize.add(512);
+		listKeySize.add(1024);
+		listKeySize.add(2048);
+		listKeySize.add(4096);
 
 		cryptography = new AsymmetricAlgorithm(algorithmSelected, keySizeSelected);
 
@@ -316,8 +317,9 @@ public class AsymmetricPane extends JPanel {
 		keySizeLbl.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		panel.add(keySizeLbl);
 
-		keySizeCbx = new JComboBox<String>();
-		keySizeCbx.setModel(new DefaultComboBoxModel(new String[] { ("" + keySizeSelected) }));
+//		keySizeCbx = new JComboBox<String>();
+		List<String> listKeySizeStr = listKeySize.stream().map(item -> item.toString()).collect(Collectors.toList());
+		keySizeCbx = new JComboBox<Object>(listKeySizeStr.toArray());
 		keySizeCbx.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		keySizeCbx.addActionListener(new ActionListener() {
 

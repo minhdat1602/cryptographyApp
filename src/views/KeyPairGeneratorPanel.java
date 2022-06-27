@@ -31,6 +31,7 @@ import javax.swing.border.TitledBorder;
 
 import algorithms.AsymmetricAlgorithm;
 import commons.AsymmetricConstants;
+import utils.AlgorithmUtils;
 import utils.FIleUtils;
 
 public class KeyPairGeneratorPanel extends JPanel {
@@ -60,16 +61,16 @@ public class KeyPairGeneratorPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public KeyPairGeneratorPanel() {
-		
+
 		// Initilization
 		algorithmSelected = "RSA";
 		listKeySize = new ArrayList<Integer>();
+		listKeySize.add(2048);
 		listKeySize.add(512);
 		listKeySize.add(1024);
-		listKeySize.add(2048);
 		listKeySize.add(4096);
 		keySizeSelected = listKeySize.get(0);
-		
+
 		cryptography = new AsymmetricAlgorithm(algorithmSelected, keySizeSelected);
 
 		GUI();
@@ -109,10 +110,11 @@ public class KeyPairGeneratorPanel extends JPanel {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				JFileChooser chooser = new JFileChooser();
-				int returnVal = chooser.showOpenDialog(panel_4);
+				int returnVal = chooser.showSaveDialog(panel_4);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File fileSelected = chooser.getSelectedFile();
-					FIleUtils.writeFile(privateKeyTf.getText(), fileSelected);
+					AlgorithmUtils.writeFile(fileSelected,
+							Base64.getDecoder().decode(privateKeyTf.getText().toString().getBytes()));
 
 					JOptionPane.showMessageDialog(panel_4, "Saved");
 				}
@@ -121,7 +123,7 @@ public class KeyPairGeneratorPanel extends JPanel {
 
 		});
 		panel_4.add(privateKeyBtn, BorderLayout.EAST);
-		
+
 		JLabel privateKeyLbl = new JLabel("Private Key");
 		privateKeyLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		privateKeyLbl.setPreferredSize(new Dimension(80, 100));
@@ -149,10 +151,11 @@ public class KeyPairGeneratorPanel extends JPanel {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				JFileChooser chooser = new JFileChooser();
-				int returnVal = chooser.showOpenDialog(panel_4);
+				int returnVal = chooser.showSaveDialog(panel_4);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File fileSelected = chooser.getSelectedFile();
-					FIleUtils.writeFile(publicKeyTf.getText(), fileSelected);
+					AlgorithmUtils.writeFile(fileSelected,
+							Base64.getDecoder().decode(publicKeyTf.getText().toString()));
 
 					JOptionPane.showMessageDialog(panel_5, "Saved");
 				}
@@ -162,7 +165,7 @@ public class KeyPairGeneratorPanel extends JPanel {
 		});
 
 		panel_5.add(publicKeyBtn, BorderLayout.EAST);
-		
+
 		JLabel publicKeyLbl = new JLabel("Public Key ");
 		publicKeyLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		publicKeyLbl.setPreferredSize(new Dimension(80, 100));
@@ -176,7 +179,8 @@ public class KeyPairGeneratorPanel extends JPanel {
 		panel_2.setLayout(new GridLayout(1, 0, 0, 0));
 
 		JLabel lblNewLabel_1 = new JLabel("");
-		ImageIcon icon1 = new ImageIcon(new ImageIcon(KeyPairGeneratorPanel.class.getResource("/images/day.jpg")).getImage().getScaledInstance(580, 250, 1));
+		ImageIcon icon1 = new ImageIcon(new ImageIcon(KeyPairGeneratorPanel.class.getResource("/images/lock2.png"))
+				.getImage().getScaledInstance(580, 250, 1));
 		lblNewLabel_1.setIcon(icon1);
 		lblNewLabel_1.setBackground(Color.WHITE);
 //		ImageIcon imageIcon1 = new ImageIcon(new ImageIcon(HashPanel.class.getResource("/images/6.jpg")).getImage().getScaledInstance(580, 250, 1));
@@ -190,7 +194,8 @@ public class KeyPairGeneratorPanel extends JPanel {
 		panel_3.setLayout(new GridLayout(1, 0, 0, 0));
 
 		JLabel lblNewLabel = new JLabel("");
-		ImageIcon imageIcon2 = new ImageIcon(new ImageIcon(HashPanel.class.getResource("/images/Public-Key-and-the-Private-Key.jpg")).getImage().getScaledInstance(580, 280, 0));
+		ImageIcon imageIcon2 = new ImageIcon(new ImageIcon(HashPanel.class.getResource("/images/keypair2.png"))
+				.getImage().getScaledInstance(580, 280, 0));
 		lblNewLabel.setIcon(imageIcon2);
 		panel_3.add(lblNewLabel);
 		// Output section end
@@ -199,7 +204,9 @@ public class KeyPairGeneratorPanel extends JPanel {
 		propertySection.setBackground(new Color(240, 240, 240));
 		propertySection.setLayout(null);
 		propertySection.setPreferredSize(new Dimension(RIGHT_WIDTH, HEIGHT));
-		propertySection.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Select", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		propertySection.setBorder(new TitledBorder(
+				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Select",
+				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		propertySection.setBounds(LEFT_WIDTH, 0, RIGHT_WIDTH, HEIGHT);
 		add(propertySection, BorderLayout.EAST);
 
@@ -232,9 +239,9 @@ public class KeyPairGeneratorPanel extends JPanel {
 				switch (algorithmSelected) {
 				case "RSA":
 					listKeySize = new ArrayList<Integer>();
+					listKeySize.add(2048);
 					listKeySize.add(512);
 					listKeySize.add(1024);
-					listKeySize.add(2048);
 					listKeySize.add(4096);
 					break;
 				}
@@ -271,7 +278,8 @@ public class KeyPairGeneratorPanel extends JPanel {
 		panel.add(keySizeCbx);
 
 		JButton runBtn = new JButton("Start");
-		ImageIcon runIcon = new ImageIcon(new ImageIcon(AsymmetricPane.class.getResource("/images/run.png")).getImage().getScaledInstance(30, 30, 1));
+		ImageIcon runIcon = new ImageIcon(new ImageIcon(AsymmetricPane.class.getResource("/images/run.png")).getImage()
+				.getScaledInstance(30, 30, 1));
 		runBtn.setIcon(runIcon);
 		runBtn.setForeground(Color.WHITE);
 		runBtn.setBackground(Color.DARK_GRAY);

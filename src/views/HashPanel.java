@@ -148,7 +148,7 @@ public class HashPanel extends JPanel {
 		panel_4.add(saveBtn, BorderLayout.SOUTH);
 
 		JLabel lblNewLabel = new JLabel("");
-		ImageIcon imageIcon = new ImageIcon(new ImageIcon(HashPanel.class.getResource("/images/hash-function.png")).getImage()
+		ImageIcon imageIcon = new ImageIcon(new ImageIcon(HashPanel.class.getResource("/images/hash2.png")).getImage()
 						.getScaledInstance(650, 280, 0));
 		lblNewLabel.setIcon(imageIcon);
 		contentSection.add(lblNewLabel);

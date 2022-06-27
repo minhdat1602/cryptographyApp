@@ -254,6 +254,8 @@ public class AsymmetricPane extends JPanel {
 					outputFile = chooser.getSelectedFile();
 					outputTxt = outputArea.getText();
 					FIleUtils.writeFile(outputTxt, outputFile);
+					
+					JOptionPane.showMessageDialog(inputComponent, "Saved");
 				} else {
 					System.out.println("NOOOOOOOOOOOOOOOOO");
 				}

@@ -349,6 +349,11 @@ public class SymmetricPane extends JPanel {
 					listKeySize.add(112);
 					listKeySize.add(168);
 					break;
+				case "BlowFish":
+					listKeySize = new ArrayList<Integer>();
+					listKeySize.add(112);
+					listKeySize.add(168);
+					break;
 				case "RC2":
 					listKeySize = new ArrayList<Integer>();
 					listKeySize.add(56);

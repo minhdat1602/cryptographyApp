@@ -1,12 +1,10 @@
 package algorithms;
 
-import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
@@ -21,13 +19,6 @@ public class SymmetricAlgorithm {
 	private int keySize;
 	private String mode;
 	private String padding;
-
-	byte[] iv = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-	IvParameterSpec ivspec16 = new IvParameterSpec(iv);
-
-	byte[] iv2 = { 0, 0, 0, 0, 0, 0, 0, 0 };
-	String iv22 = "0000000000000000";
-	IvParameterSpec ivspec8 = new IvParameterSpec(iv2);
 
 	public SymmetricAlgorithm(String cryptoType, int keySize) {
 		super();
@@ -61,11 +52,6 @@ public class SymmetricAlgorithm {
 	}
 
 	public String encrypt(String text, String key) throws Exception {
-		if (mode.equalsIgnoreCase("DES")) {
-			if (padding.equalsIgnoreCase("NoPadding")) {
-				throw new IllegalBlockSizeException("Input length not multiple of 8 bytes");
-			}
-		}
 
 		byte[] decodedKey = Base64.getDecoder().decode(key);
 		SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, algorithm);
@@ -97,10 +83,10 @@ public class SymmetricAlgorithm {
 	public static void main(String[] args) throws Exception {
 		SymmetricAlgorithm crypto = new SymmetricAlgorithm();
 
-		crypto.setAlgorithm("DES");
+		crypto.setAlgorithm("Blowfish");
 		crypto.setKeySize(56);
-		crypto.setMode("ECB");
-		crypto.setPadding("NoPadding");
+//		crypto.setMode("ECB");
+//		crypto.setPadding("NoPadding");
 //		crypto.setPadding("PKCS5Padding");
 //		crypto.setPadding("ISO10126Padding");
 //		crypto.setPadding("BitPadding");

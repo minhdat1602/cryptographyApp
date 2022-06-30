@@ -72,6 +72,7 @@ public class HashPanel extends JPanel {
 		panel_1.setLayout(new BorderLayout(0, 0));
 
 		JTextArea inputArea = new JTextArea();
+		inputArea.setLineWrap(true);
 		inputArea.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		JScrollPane inputSrp = new JScrollPane(inputArea);
 		panel_1.add(inputSrp, BorderLayout.CENTER);
@@ -112,6 +113,7 @@ public class HashPanel extends JPanel {
 		panel_2.setLayout(new BorderLayout(0, 0));
 
 		JTextArea hashArea = new JTextArea();
+		hashArea.setLineWrap(true);
 		hashArea.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		hashArea.setEditable(false);
 		JScrollPane hashSrp = new JScrollPane(hashArea);
@@ -149,7 +151,7 @@ public class HashPanel extends JPanel {
 
 		JLabel lblNewLabel = new JLabel("");
 		ImageIcon imageIcon = new ImageIcon(new ImageIcon(HashPanel.class.getResource("/images/hash2.png")).getImage()
-						.getScaledInstance(650, 280, 0));
+				.getScaledInstance(650, 280, 0));
 		lblNewLabel.setIcon(imageIcon);
 		contentSection.add(lblNewLabel);
 
@@ -164,7 +166,8 @@ public class HashPanel extends JPanel {
 		add(propertySection, BorderLayout.EAST);
 
 		JButton runBtn = new JButton("Start");
-		ImageIcon runIcon = new ImageIcon(new ImageIcon(AsymmetricPane.class.getResource("/images/run.png")).getImage().getScaledInstance(30, 30, 1));
+		ImageIcon runIcon = new ImageIcon(new ImageIcon(AsymmetricPane.class.getResource("/images/run.png")).getImage()
+				.getScaledInstance(30, 30, 1));
 		runBtn.setIcon(runIcon);
 		runBtn.setForeground(Color.WHITE);
 		runBtn.setBackground(Color.DARK_GRAY);
@@ -208,7 +211,7 @@ public class HashPanel extends JPanel {
 		hashAlgorithmCbx.setSelectedIndex(0);
 		hashAlgorithmCbx.setBounds(120, 35, 110, 30);
 		propertySection.add(hashAlgorithmCbx);
-		
+
 		JLabel algorithmLbl = new JLabel("Algorithm");
 		algorithmLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		algorithmLbl.setFont(new Font("Tahoma", Font.PLAIN, 12));

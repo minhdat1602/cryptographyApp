@@ -99,6 +99,7 @@ public class VerifyPanel extends JPanel {
 		inputComponent.setLayout(new BorderLayout(0, 0));
 
 		inputArea = new JTextArea();
+		inputArea.setLineWrap(true);
 		JScrollPane inputSp = new JScrollPane(inputArea);
 		inputComponent.add(inputSp, BorderLayout.CENTER);
 
@@ -134,7 +135,7 @@ public class VerifyPanel extends JPanel {
 					File inputFile = inputFileChooser.getSelectedFile();
 
 					String inputFilePath = inputFile.getPath();
-					String inputVal = new String(AlgorithmUtils.readFile(inputFile));
+					String inputVal = AlgorithmUtils.readFile(inputFile);
 					inputTxt = inputVal;
 					// set value from file into text field, textArea
 					inputFileTf.setText(inputFilePath);
@@ -190,13 +191,13 @@ public class VerifyPanel extends JPanel {
 					File privateKeyFile = keyFileChooser.getSelectedFile();
 
 					String keyFilePath = privateKeyFile.getPath();
-					String privateKeyVal = new String(AlgorithmUtils.readFile(privateKeyFile));
+					String privateKeyVal = AlgorithmUtils.readFile(privateKeyFile);
 					privateKeyTxt = privateKeyVal;
 					// set value from file into textfield, textAre
 
-					String privateKeyB64 = new String(Base64.getEncoder().encode(privateKeyTxt.getBytes()));
+					//String privateKeyB64 = new String(Base64.getEncoder().encode(privateKeyTxt.getBytes()));
 
-					keyTf.setText(privateKeyB64);
+					keyTf.setText(privateKeyTxt);
 					keyFileTf.setText(keyFilePath);
 				}
 			}
@@ -212,6 +213,7 @@ public class VerifyPanel extends JPanel {
 		signatureComponent.setLayout(new BorderLayout(0, 0));
 
 		signatureArea = new JTextArea();
+		signatureArea.setLineWrap(true);
 		JScrollPane signatureSp = new JScrollPane(signatureArea);
 		signatureComponent.add(signatureSp, BorderLayout.CENTER);
 
@@ -244,13 +246,13 @@ public class VerifyPanel extends JPanel {
 					File signatureFile = signatureFileChooser.getSelectedFile();
 
 					String signatureFilePath = signatureFile.getPath();
-					String signatureVal = new String(AlgorithmUtils.readFile(signatureFile));
+					String signatureVal = AlgorithmUtils.readFile(signatureFile);
 					signatureTxt = signatureVal;
 					// set value from file into textfield, textAre
 
-					String signatureB64 = new String(Base64.getEncoder().encode(signatureTxt.getBytes()));
+//					String signatureB64 = new String(Base64.getEncoder().encode(signatureTxt.getBytes()));
 
-					signatureArea.setText(signatureB64);
+					signatureArea.setText(signatureTxt);
 					signatureFileTf.setText(signatureFilePath);
 				}
 			}
@@ -345,42 +347,50 @@ public class VerifyPanel extends JPanel {
 						
 						String message = verify ? "signature correctly" : "signature incorrect";
 						JOptionPane.showMessageDialog(inputComponent, message);
+				}else {
+					String input = inputArea.getText().toString();
+					String publicKeyBase64 = keyTf.getText().toString();
+					String signatureBase64 = signatureArea.getText().toString();
+					
+					boolean verify = DigitalSignature.verifyBase64(input, signatureBase64, publicKeyBase64);
+					String message = verify ? "signature correctly" : "signature incorrect";
+					JOptionPane.showMessageDialog(inputComponent, message);
 				}
 
-				String input;
-				String key;
-				byte[] signatureBytes;
-				// sign file
-				if (inputFileTf.getText() != null && !inputFileTf.getText().isEmpty() && keyFileTf.getText() != null
-						&& !keyFileTf.getText().isEmpty()) {
-
-					// get input and private key file path
-					input = inputFileTf.getText().toString();
-					key = keyFileTf.getText().toString();
-
-					// sign files
-					signatureBytes = DigitalSignature.signFile(input, key);
-				}
-				// sign text
-				else {
-					// get value entered from users
-					input = inputArea.getText().toString();
-					key = new String(Base64.getDecoder().decode(keyTf.getText().toString().getBytes()));
-
-					// sign text
-					signatureBytes = DigitalSignature.signStr(input, key);
-				}
-
-				// set value for signature text fied
-				signatureTxt = new String(signatureBytes);
-				signatureArea.setText(new String(Base64.getEncoder().encode(signatureBytes)));
-
-				// logging input, private key, signature
-				System.out.println("INPUT:" + input);
-				System.out.println("KEY:" + key);
-				System.out.println("OUTPUT:" + signatureBytes);
-
-				signatureFileBtn.setEnabled(true);
+//				String input;
+//				String key;
+//				byte[] signatureBytes;
+//				// sign file
+//				if (inputFileTf.getText() != null && !inputFileTf.getText().isEmpty() && keyFileTf.getText() != null
+//						&& !keyFileTf.getText().isEmpty()) {
+//
+//					// get input and private key file path
+//					input = inputFileTf.getText().toString();
+//					key = keyFileTf.getText().toString();
+//
+//					// sign files
+//					signatureBytes = DigitalSignature.signFile(input, key);
+//				}
+//				// sign text
+//				else {
+//					// get value entered from users
+//					input = inputArea.getText().toString();
+//					key = new String(Base64.getDecoder().decode(keyTf.getText().toString().getBytes()));
+//
+//					// sign text
+//					signatureBytes = DigitalSignature.signStr(input, key);
+//				}
+//
+//				// set value for signature text fied
+//				signatureTxt = new String(signatureBytes);
+//				signatureArea.setText(new String(Base64.getEncoder().encode(signatureBytes)));
+//
+//				// logging input, private key, signature
+//				System.out.println("INPUT:" + input);
+//				System.out.println("KEY:" + key);
+//				System.out.println("OUTPUT:" + signatureBytes);
+//
+//				signatureFileBtn.setEnabled(true);
 			}
 		});
 		propertySection.add(runBtn);

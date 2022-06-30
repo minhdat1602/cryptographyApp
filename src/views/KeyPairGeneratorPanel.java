@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -113,8 +114,7 @@ public class KeyPairGeneratorPanel extends JPanel {
 				int returnVal = chooser.showSaveDialog(panel_4);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File fileSelected = chooser.getSelectedFile();
-					AlgorithmUtils.writeFile(fileSelected,
-							Base64.getDecoder().decode(privateKeyTf.getText().toString().getBytes()));
+					AlgorithmUtils.writeFile(fileSelected, privateKeyTf.getText().toString().getBytes());
 
 					JOptionPane.showMessageDialog(panel_4, "Saved");
 				}
@@ -154,8 +154,7 @@ public class KeyPairGeneratorPanel extends JPanel {
 				int returnVal = chooser.showSaveDialog(panel_4);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File fileSelected = chooser.getSelectedFile();
-					AlgorithmUtils.writeFile(fileSelected,
-							Base64.getDecoder().decode(publicKeyTf.getText().toString()));
+					AlgorithmUtils.writeFile(fileSelected, publicKeyTf.getText().toString().getBytes());
 
 					JOptionPane.showMessageDialog(panel_5, "Saved");
 				}
@@ -291,9 +290,15 @@ public class KeyPairGeneratorPanel extends JPanel {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				try {
 					KeyPair keypair = cryptography.generateKey();
-					privateKeyTf.setText(Base64.getEncoder().encodeToString(keypair.getPrivate().getEncoded()));
-					publicKeyTf.setText(Base64.getEncoder().encodeToString(keypair.getPublic().getEncoded()));
-
+					PrivateKey privateKey = keypair.getPrivate();
+					String privateKeyBase64 = Base64.getEncoder().encodeToString(privateKey.getEncoded());
+					privateKeyTf.setText(privateKeyBase64);
+					System.out.println(privateKeyBase64);
+					
+					String publicKeyBase64 = Base64.getEncoder().encodeToString(keypair.getPublic().getEncoded());
+					publicKeyTf.setText(publicKeyBase64);
+					System.out.println(publicKeyBase64);
+					
 					privateKeyBtn.setEnabled(true);
 					publicKeyBtn.setEnabled(true);
 				} catch (NoSuchAlgorithmException e1) {

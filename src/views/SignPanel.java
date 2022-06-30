@@ -31,6 +31,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import algorithms.DigitalSignature;
+import javafx.scene.control.ScrollPane;
 import utils.AlgorithmUtils;
 
 public class SignPanel extends JPanel {
@@ -99,6 +100,7 @@ public class SignPanel extends JPanel {
 		inputComponent.setLayout(new BorderLayout(0, 0));
 
 		inputArea = new JTextArea();
+		inputArea.setLineWrap(true);
 		JScrollPane inputSp = new JScrollPane(inputArea);
 		inputComponent.add(inputSp, BorderLayout.CENTER);
 
@@ -134,11 +136,11 @@ public class SignPanel extends JPanel {
 					File inputFile = inputFileChooser.getSelectedFile();
 
 					String inputFilePath = inputFile.getPath();
-					String inputVal = new String(AlgorithmUtils.readFile(inputFile));
+					String inputVal = AlgorithmUtils.readFile(inputFile);
 					inputTxt = inputVal;
 					// set value from file into text field, textArea
 					inputFileTf.setText(inputFilePath);
-					inputArea.setText(inputVal);
+					inputArea.setText(inputTxt);
 				}
 			}
 		});
@@ -211,6 +213,7 @@ public class SignPanel extends JPanel {
 		outputComponent.setLayout(new BorderLayout(0, 0));
 
 		outputArea = new JTextArea();
+		outputArea.setLineWrap(true);
 		outputArea.setEditable(false);
 		JScrollPane outputSp = new JScrollPane(outputArea);
 		outputComponent.add(outputSp, BorderLayout.CENTER);
@@ -249,7 +252,7 @@ public class SignPanel extends JPanel {
 					outputFileTf.setText(outputFilePath);
 
 					// save file
-					AlgorithmUtils.writeFile(outputFile, Base64.getDecoder().decode(outputArea.getText().toString()));
+					AlgorithmUtils.writeFile(outputFile, outputArea.getText().getBytes());
 					System.out.println("signature is Saved");
 
 					JOptionPane.showMessageDialog(inputComponent, "Saved");
@@ -329,7 +332,7 @@ public class SignPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				String input;
 				String key;
-				byte[] signatureBytes;
+				String signature;
 				// sign file
 				if (inputFileTf.getText() != null && !inputFileTf.getText().isEmpty() && keyFileTf.getText() != null
 						&& !keyFileTf.getText().isEmpty()) {
@@ -339,26 +342,28 @@ public class SignPanel extends JPanel {
 					key = keyFileTf.getText().toString();
 
 					// sign files
-					signatureBytes = DigitalSignature.signFile(input, key);
+					signature = DigitalSignature.signFile(input, key);
+					
+					// set value for output text fied
+					outputTxt = signature;
+					outputArea.setText(signature);
+
+					// logging input, private key, output
+					System.out.println("INPUT:" + input);
+					System.out.println("KEY:" + key);
+					System.out.println("OUTPUT:" + signature);
 				}
 				// sign text
 				else {
 					// get value entered from users
 					input = inputArea.getText().toString();
-					key = new String(Base64.getDecoder().decode(keyTf.getText().toString().getBytes()));
+					key = keyTf.getText().toString();
 
 					// sign text
-					signatureBytes = DigitalSignature.signStr(input, key);
+					signature = DigitalSignature.signBase64(input, key);
+					outputTxt = signature;
+					outputArea.setText(signature);
 				}
-
-				// set value for output text fied
-				outputTxt = new String(signatureBytes);
-				outputArea.setText(new String(Base64.getEncoder().encode(signatureBytes)));
-
-				// logging input, private key, output
-				System.out.println("INPUT:" + input);
-				System.out.println("KEY:" + key);
-				System.out.println("OUTPUT:" + signatureBytes);
 
 				outputFileBtn.setEnabled(true);;
 			}

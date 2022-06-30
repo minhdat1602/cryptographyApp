@@ -73,7 +73,7 @@ public class AsymmetricAlgorithm {
 	 * @throws NoSuchAlgorithmException
 	 */
 	public KeyPair generateKey() throws NoSuchAlgorithmException {
-		SecureRandom srandom = new SecureRandom();
+		SecureRandom srandom = SecureRandom.getInstanceStrong();
 		KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(algorithm);
 		
 		keyPairGenerator.initialize(keySize, srandom);
